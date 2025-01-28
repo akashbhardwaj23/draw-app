@@ -17,7 +17,7 @@ const middleware = () =>  async (req : Request, res : Response, next : NextFunct
              res.status(403).json({message : "Unauthorized"});
              return
         }
-        //@ts-ignore
+        
         req.userId = decoded.userId
         next()
     } catch (error) {

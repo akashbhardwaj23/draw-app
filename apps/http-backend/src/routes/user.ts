@@ -29,13 +29,13 @@ router.post("/signup", async (req, res) => {
             res.status(401).json({message : "User already present"});
         }
 
-        const hashedPassword = await bcrypt.hash(data.password, "7");
+        const hashedPassword = await bcrypt.hash(data.password, 7);
 
         const user = await client.user.create({
             data : {
                 email : data.email,
                 name : data.name,
-                password : data.password
+                password : hashedPassword
             }
         });
         
@@ -44,6 +44,7 @@ router.post("/signup", async (req, res) => {
         res.status(200).json({ token })
         return
    } catch (error) {
+    console.log(error)
         res.status(403).json({message : "Unauthorized"})
    }
 })

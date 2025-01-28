@@ -3,7 +3,7 @@ import { verify } from "jsonwebtoken"
 import { JWT_SECRET } from "@repo/backend-common/types"
 
 const wss = new WebSocketServer({
-    port : 3002
+    port : 8080
 })
 
 function checkAuthUser(token : string) : string | null {

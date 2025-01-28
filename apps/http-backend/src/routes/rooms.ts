@@ -23,13 +23,8 @@ router.post("/create-room", authMiddleware, async (req, res) => {
         res.status(401).json({message : "Room Already Exits"});
         return;
     }
-    //@ts-ignore
-    const userId = req.userId;
-
-    if(!userId){
-        res.status(403).json({message : "Unauthorized"});
-        return
-    }
+    const userId = req.userId || "";
+    
     const room = await client.room.create({
         data : {
             slug : data.data.name,
@@ -42,3 +37,8 @@ router.post("/create-room", authMiddleware, async (req, res) => {
         roomId : room.id
     })
 })
+
+
+
+
+export default router;
