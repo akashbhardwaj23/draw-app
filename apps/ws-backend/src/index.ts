@@ -30,11 +30,15 @@ wss.on("connection", (ws, request) => {
         return;
     }
 
+    console.log("Got A Request")
+
     const queryParams = new URLSearchParams(url.split('?')[1]);
 
     const token = queryParams.get("token") || "";   
     const userId = checkAuthUser(token);
+    console.log(userId)
     if(!userId){
+        console.log("Here in userId")
         ws.close();
         return
     }

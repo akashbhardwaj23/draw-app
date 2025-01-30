@@ -1,26 +1,29 @@
-import { WS_URL } from "@/utils/config";
+"use client"
 import { useEffect, useState } from "react";
 
-
-
-
-export function useSocket(){
-    const [socket, setSocket] = useState<WebSocket | null>(null);
-    const [loading, setLoading] = useState(true);
-
+const WS_URL = "ws://localhost:8080";
+ 
+export function useSocket() {
+    const [socket, setSocket] = useState<WebSocket>()
+    const [loading, setLoading] = useState(false)
 
     useEffect(() => {
-        if(!socket){
-            const newSocket = new WebSocket(WS_URL);
-            setSocket(newSocket);
+        const ws = new WebSocket(`${WS_URL}?token=${localStorage.getItem("token")}`)
+        setLoading(true)
+        ws.onopen = () => {
+            setSocket(ws)
+            setLoading(false)
         }
 
-        setLoading(false)
-    }, [socket])
+        ws.onerror = (error) => {
+            console.error("WebSocket error:", error);
+            setLoading(false);
+          };
+        
+        return () => {
+            socket?.close();
+        };
+    }, []);
 
-
-    return {
-        socket,
-        loading
-    }
+    return {socket, loading};
 }

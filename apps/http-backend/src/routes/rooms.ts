@@ -47,6 +47,9 @@ router.get("/chat/:roomId", authMiddleware, async (req, res) => {
         where : {
             roomId : Number(roomId)
         },
+        select : {
+         message : true
+        },
         orderBy: {
             id : "desc"
         },

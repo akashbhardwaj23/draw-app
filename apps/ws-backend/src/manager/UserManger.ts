@@ -26,18 +26,20 @@ export class UserManager {
     }
 
     public addUser(newUser : Users){
-        const existingUser = this.users.find((user) => user.userId === newUser.userId)
-        if(!existingUser){
-            return;
-        }
+        // const existingUser = this.users.find((user) => user.userId === newUser.userId)
+        // console.log("Existing user", existingUser)
+        // if(existingUser){
+        //     return;
+        // }
         this.users.push(newUser);
+        console.log("Users ", this.users.length)
     }
 
     public joinRoom(roomId : string, ws : WebSocket){
         const user = this.users.find((x) => x.ws === ws);
 
         const existingRoom = user?.rooms.find(room => room === roomId)
-
+        console.log("Existing Room ",existingRoom)
         if(existingRoom){
             return;
         }
@@ -54,16 +56,17 @@ export class UserManager {
 
     public async chat(roomId : string, ws:WebSocket, message : ChatMessageType, userId : string){
             const parsedChat = ChatMessageSchema.safeParse(message.chat);
+            console.log("In Parsed Chat");
             if(!parsedChat.success){
                 ws.close();
+                console.log("Returning")
                 return;
             }
 
             const chat = parsedChat.data;
-
-
             const myRoomId = Number(roomId);
                           
+            console.log("Users ", this.users)
             console.log("Before Prisma invocation on chat")
             //TODO - PUT THIS IN A QUEUE
             await client.chat.create({
@@ -73,7 +76,7 @@ export class UserManager {
                         create : {
                             type : chat.type,
                             xPosition : chat.xPosition,
-                            yPostion : chat.yPosition,
+                            yPosition : chat.yPosition,
                             width : chat.width,
                             height : chat.height
                         }
@@ -83,11 +86,12 @@ export class UserManager {
             })
 
             console.log("After Prisma invocation on chat")
-
+            console.log(roomId)
             this.users.forEach((user) => {
                 if(user.rooms.includes(roomId)){
+                    console.log("sending message to everyone in room ", roomId)
                     user.ws.send(JSON.stringify({
-                        types : "chat",
+                        type : "chat",
                         chat,
                         roomId
                     }))

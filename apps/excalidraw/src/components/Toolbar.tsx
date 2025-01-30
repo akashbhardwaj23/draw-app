@@ -5,12 +5,12 @@ import { Paintbrush, Eraser, Trash2, Square, Circle, Minus, Type } from "lucide-
 interface ToolbarProps {
 //   setColor: (color: string) => void
   setTool: (tool: "pen" | "eraser" | "shape" | "text") => void
-  setShapeType: (shapeType: "rectangle" | "ellipse" | "line") => void
+  setShapeType: (shapeType: "Rectangle" | "Ellipse" | "Line") => void
   setFontSize: (size: number) => void
   clearCanvas: () => void
 //   color: string
   tool: "pen" | "eraser" | "shape" | "text"
-  shapeType: "rectangle" | "ellipse" | "line"
+  shapeType: "Rectangle" | "Ellipse" | "Line"
   fontSize: number
 }
 
@@ -45,29 +45,29 @@ export const Toolbar: React.FC<ToolbarProps> = ({
             <Eraser size={24} />
           </button>
           <button
-            className={`p-2 rounded-lg transition-colors ${tool === "shape" && shapeType === "rectangle" ? "bg-gray-200" : "hover:bg-gray-100"}`}
+            className={`p-2 rounded-lg transition-colors ${tool === "shape" && shapeType === "Rectangle" ? "bg-gray-200" : "hover:bg-gray-100"}`}
             onClick={() => {
               setTool("shape")
-              setShapeType("rectangle")
+              setShapeType("Rectangle")
             }}
           >
             <Square size={24} />
           </button>
           <button
-            className={`p-2 rounded-lg transition-colors ${tool === "shape" && shapeType === "ellipse" ? "bg-gray-200" : "hover:bg-gray-100"}`}
+            className={`p-2 rounded-lg transition-colors ${tool === "shape" && shapeType === "Ellipse" ? "bg-gray-200" : "hover:bg-gray-100"}`}
             onClick={() => {
                 console.log("assigning shape")
               setTool("shape")
-              setShapeType("ellipse")
+              setShapeType("Ellipse")
             }}
           >
             <Circle size={24} />
           </button>
           <button
-            className={`p-2 rounded-lg transition-colors ${tool === "shape" && shapeType === "line" ? "bg-gray-200" : "hover:bg-gray-100"}`}
+            className={`p-2 rounded-lg transition-colors ${tool === "shape" && shapeType === "Line" ? "bg-gray-200" : "hover:bg-gray-100"}`}
             onClick={() => {
               setTool("shape")
-              setShapeType("line")
+              setShapeType("Line")
             }}
           >
             <Minus size={24} />

@@ -29,7 +29,7 @@ export default function RoomJoin() {
             name : roomName
         }, {
             headers : {
-                Authorization : JSON.parse(token)
+                Authorization : token
             }
         })
         const roomId = response.data.roomId;
