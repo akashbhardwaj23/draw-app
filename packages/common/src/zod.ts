@@ -16,3 +16,11 @@ export const SignInInputs = z.object({
 export const CreateRoomSchema = z.object({
     name : z.string()
 })
+
+export const ChatMessageSchema = z.object({
+    type : z.enum(["Rectangle", "Square", "Ellipse"]),
+    xPosition : z.number(),
+    yPosition : z.number(),
+    width : z.number(),
+    height : z.number()
+})

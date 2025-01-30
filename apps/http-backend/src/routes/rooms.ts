@@ -20,7 +20,9 @@ router.post("/create-room", authMiddleware, async (req, res) => {
     });
 
     if(existingRoom){
-        res.status(401).json({message : "Room Already Exits"});
+        res.status(201).json({
+            roomId : existingRoom.id
+        });
         return;
     }
     const userId = req.userId || "";
@@ -35,6 +37,53 @@ router.post("/create-room", authMiddleware, async (req, res) => {
 
     res.status(200).json({
         roomId : room.id
+    })
+})
+
+
+router.get("/chat/:roomId", authMiddleware, async (req, res) => {
+    const roomId = req.params.roomId || "";
+    const messages = await client.chat.findMany({
+        where : {
+            roomId : Number(roomId)
+        },
+        orderBy: {
+            id : "desc"
+        },
+        take : 50
+    });
+
+    if(!messages){
+        res.status(411).json({message : "No Message found"})
+        return
+    }
+
+    console.log(messages)
+
+    res.status(200).json({
+        messages
+    })
+
+})
+
+
+
+router.get("/room/:slug", authMiddleware, async (req, res) => {
+    const slug = req.params.slug;
+
+    const room = await client.room.findFirst({
+        where: {
+            slug
+        }
+    });
+
+    if(!room){
+        res.status(411).json({message : "No Room Found"});
+        return
+    }
+
+    res.status(200).json({
+        room
     })
 })
 

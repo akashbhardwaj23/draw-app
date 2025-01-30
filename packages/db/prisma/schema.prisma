@@ -18,19 +18,37 @@ model User {
 }
 
 model Room {
-  id          Int     @id  @default(autoincrement())
-  slug        String       @unique
-  created_at  DateTime     @default(now())
+  id          Int     @id   @default(autoincrement())
+  slug        String        @unique
+  created_at  DateTime      @default(now())
   adminId     String
-  admin       User         @relation(fields: [adminId], references: [id])
+  admin       User          @relation(fields: [adminId], references: [id])
   chats       Chat[]
 }
 
 model Chat {
-  id          Int   @id  @default(autoincrement())
+  id          Int     @id   @default(autoincrement())
   roomId      Int
-  message     String
+  message     ShapeMessage?   // {type : "rect", x , y, width , height}
   userId      String
-  room        Room       @relation(fields: [roomId], references: [id])
-  user        User       @relation(fields: [userId], references: [id])
+  room        Room          @relation(fields: [roomId], references: [id])
+  user        User          @relation(fields: [userId], references: [id])
+}
+
+
+model ShapeMessage {
+  id        String   @id @default(uuid())
+  type      ShapeType
+  xPosition Int
+  yPostion  Int
+  width     Int
+  height    Int
+  chatId    Int        @unique
+  chat      Chat       @relation(fields: [chatId], references: [id])
+}
+
+enum ShapeType {
+  Rectangle
+  Square
+  Ellipse
 }
