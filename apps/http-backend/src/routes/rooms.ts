@@ -90,6 +90,35 @@ router.get("/room/:slug", authMiddleware, async (req, res) => {
     })
 })
 
+router.put("/delete-chat/:roomId", async (req, res) => {
+    const roomId = req.params.roomId || "";
+
+   try {
+    await client.$transaction([
+
+        client.shapeMessage.deleteMany({
+            where : {
+                roomId : Number(roomId)
+            }
+        }),
+        client.chat.deleteMany({
+            where : {
+                roomId: Number(roomId)
+            }
+        })
+    ])
+
+    res.status(200).json({
+        message : "Deleted"
+    })
+   } catch (error) {
+        console.log(error)
+        res.status(200).json({
+            message : "Error While Deleting"
+        })
+   }
+})
+
 
 
 

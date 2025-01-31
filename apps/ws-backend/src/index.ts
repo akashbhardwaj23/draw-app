@@ -63,6 +63,11 @@ wss.on("connection", (ws, request) => {
             const roomId = message.roomId;
             userManager.chat(roomId, ws, message, userId);
         }
+
+        if(message.type === "delete-chat"){
+            const roomId = message.roomId;
+            userManager.deleteChat(roomId)
+        }
     })
 
     ws.onclose = () => {

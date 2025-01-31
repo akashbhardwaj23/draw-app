@@ -78,7 +78,8 @@ export class UserManager {
                             xPosition : chat.xPosition,
                             yPosition : chat.yPosition,
                             width : chat.width,
-                            height : chat.height
+                            height : chat.height,
+                            roomId : Number(roomId)
                         }
                     },
                     userId,
@@ -100,6 +101,29 @@ export class UserManager {
 
             console.log("Message Sent")
         
+    }
+
+    public async deleteChat(roomId: string){
+        const updatedShape = await client.chat.findMany({
+            where : {
+                roomId : Number(roomId)
+            },
+            select : {
+                message : true
+               }
+        })
+        this.users.forEach((user) => {
+            if(user.rooms.includes(roomId)){
+                console.log("sending Delete Message in room ", roomId)
+                user.ws.send(JSON.stringify({
+                    type : "delete-chat",
+                    roomId,
+                    updatedShape
+                }))
+            }
+        })
+
+        console.log("Message Sent")
     }
 
     public leaveUser(ws : WebSocket){
